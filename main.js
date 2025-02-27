@@ -1,3 +1,39 @@
+const INSTJE = Object.freeze({
+  0: "block.note_block.harp",
+  1: "block.note_block.bass",
+  2: "block.note_block.basedrum",
+  3: "block.note_block.snare",
+  4: "block.note_block.hat",
+  5: "block.note_block.guitar",
+  6: "block.note_block.flute",
+  7: "block.note_block.bell",
+  8: "block.note_block.chime",
+  9: "block.note_block.xylophone",
+  10: "block.note_block.iron_xylophone",
+  11: "block.note_block.cow_bell",
+  12: "block.note_block.didgeridoo",
+  13: "block.note_block.bit",
+  14: "block.note_block.banjo",
+  15: "block.note_block.pling"
+}), INSTBE = Object.freeze({
+  0: "note.harp",
+  1: "note.bass",
+  2: "note.bd",
+  3: "note.snare",
+  4: "note.hat",
+  5: "note.guitar",
+  6: "note.flute",
+  7: "note.bell",
+  8: "note.chime",
+  9: "note.xylophone",
+  10: "note.iron_xylophone",
+  11: "note.cow_bell",
+  12: "note.didgeridoo",
+  13: "note.bit",
+  14: "note.banjo",
+  15: "note.pling"
+});
+
 function readLengthedStringUtf8(buffer, cursor) {
   var l = buffer.getInt32(cursor, 1);
   return {
@@ -143,6 +179,24 @@ class NBS {
     this.customInstuments = [];
   }
 
+  /**
+   * Calculate the time to the beginning of the song in seconds.
+   * @param {Number} tick 
+   * @returns {Number}
+   */
+  getTimeSecFor(tick) {
+    return tick / this.header.tempo * 100
+  }
+
+  /**
+   * Calculate the time to the beginning of the song in gameticks.
+   * @param {Number} tick 
+   * @returns {Number}
+   */
+  getTimeGtFor(tick) {
+    return 20 / this.header.tempo * 100 * tick
+  }
+
   serialize() {
 
   }
@@ -211,7 +265,7 @@ class NBSCustomInstrument {
 
     return {
       value: result,
-      length: p = cursor
+      length: p - cursor
     }
   }
 
@@ -303,16 +357,6 @@ class NBSNote {
     this.pitch = 0;
     this.layer = 0;
   }
-
-  toString(be) {
-    if (be)
-      return [
-        "note.harp"
-      ][this.instrument] || void 0;
-    return [
-      "block.note_block.harp"
-    ][this.instrument] || void 0;
-  }
 }
 
 class NBSPlayerIterator {
@@ -356,3 +400,5 @@ exports.NBSNote = NBSNote;
 exports.NBSCustomInstrument = NBSCustomInstrument;
 exports.NBSEffectiveTick = NBSEffectiveTick;
 exports.NBSPlayerIterator = NBSPlayerIterator;
+exports.INSTBE = INSTBE;
+exports.INSTJE = INSTJE;
