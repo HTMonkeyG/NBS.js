@@ -114,6 +114,21 @@ class NBS {
       p += s.length;
     }
 
+    // Read layer properties
+    for (var i = 0; i < result.header.layerCtr; i++) {
+      s = NBSLayer.deserialize(dtv, p);
+      p += s.length;
+      result.layers.push(s.value);
+    }
+
+    // Read custom instruments
+    var ci = dtv.getUint8(p++);
+    for (var i = 0; i < ci; i++) {
+      s = NBSCustomInstrument.deserialize(dtv, p);
+      p += s.length;
+      result.customInstuments.push(s.value);
+    }
+
     return result
   }
 
@@ -124,6 +139,8 @@ class NBS {
   constructor() {
     this.header = new NBSHeader();
     this.effectiveTicks = [];
+    this.layers = [];
+    this.customInstuments = [];
   }
 
   serialize() {
@@ -133,7 +150,21 @@ class NBS {
 
 class NBSLayer {
   static deserialize(buffer, cursor) {
+    var p = cursor
+      , result = new NBSLayer()
+      , s;
 
+    s = readLengthedStringUtf8(buffer, p);
+    result.name = s.value;
+    p += s.length;
+    result.lock = buffer.getInt8(p++);
+    result.volume = buffer.getInt8(p++);
+    result.stereo = buffer.getUint8(p++);
+
+    return {
+      value: result,
+      length: p - cursor
+    }
   }
 
   constructor() {
@@ -156,6 +187,53 @@ class NBSLayer {
      * 0 is 2 blocks right, 100 is center, 200 is 2 blocks left.
      */
     this.stereo = 100;
+  }
+
+  serialize() {
+
+  }
+}
+
+class NBSCustomInstrument {
+  static deserialize(buffer, cursor) {
+    var p = cursor
+      , result = new NBSCustomInstrument()
+      , s;
+
+    s = readLengthedStringUtf8(buffer, p);
+    result.name = s.value;
+    p += s.length;
+    s = readLengthedStringUtf8(buffer, p);
+    result.path = s.value;
+    p += s.length;
+    result.key = buffer.getInt8(p++);
+    result.pressPianoKey = buffer.getUint8(p++);
+
+    return {
+      value: result,
+      length: p = cursor
+    }
+  }
+
+  constructor() {
+    /**
+     * The name of the instrument.
+     */
+    this.name = "";
+    /**
+     * The sound file of the instrument (relative path from the /Sounds directory).
+     */
+    this.path = "";
+    /**
+     * The key of the sound file.
+     * Just like the note blocks, this ranges from 0-87.
+     * Default is 45 (F#4).
+     */
+    this.key = 45;
+    /**
+     * Whether the piano should automatically press keys with this instrument when the marker passes them (0 or 1).
+     */
+    this.pressPianoKey = 0;
   }
 
   serialize() {
@@ -193,7 +271,7 @@ class NBSEffectiveTick {
     this.notes = [];
   }
 
-  serialize(lastEffectiveTick) {
+  serialize() {
 
   }
 }
@@ -275,3 +353,6 @@ exports.NBSHeader = NBSHeader;
 exports.NBS = NBS;
 exports.NBSEffectiveLayer = NBSEffectiveTick;
 exports.NBSNote = NBSNote;
+exports.NBSCustomInstrument = NBSCustomInstrument;
+exports.NBSEffectiveTick = NBSEffectiveTick;
+exports.NBSPlayerIterator = NBSPlayerIterator;
