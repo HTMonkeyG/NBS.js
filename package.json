@@ -1,0 +1,30 @@
+{
+  "name": "nbs-note.js",
+  "version": "1.0.0",
+  "description": "Read and write Minecraft Note Block Studio .nbs files with JS.",
+  "main": "main.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HTMonkeyG/NBS.js.git"
+  },
+  "keywords": [
+    "nbs",
+    "note",
+    "mcbe",
+    "minecraft",
+    "noteblock",
+    "format"
+  ],
+  "author": "HTMonkeyG",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/HTMonkeyG/NBS.js/issues"
+  },
+  "homepage": "https://github.com/HTMonkeyG/NBS.js#readme"
+}
