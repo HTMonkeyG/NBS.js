@@ -6,33 +6,119 @@ declare namespace NBSRW {
     };
 
     // String properties
+
+    /**
+     * The name of the song.
+     */
     songName: string;
+    /**
+     * The author of the song.
+     */
     author: string;
+    /**
+     * The original author of the song.
+     */
     orignalAuthor: string;
+    /**
+     * The description of the song.
+     */
     description: string;
+    /**
+     * If the song has been imported from a .mid or .schematic file, that file
+     * name is stored here (only the name of the file, not the path).
+     */
     midiFile: string;
 
     // Int32 properties
+
+    /**
+     * Amount of minutes spent on the project.
+     */
     minutes: number;
+    /**
+     * Amount of times the user has left-clicked.
+     */
     leftClick: number;
+    /**
+     * Amount of times the user has right-clicked.
+     */
     rightClick: number;
+    /**
+     * Amount of times the user has added a note block.
+     */
     noteAdded: number;
+    /**
+     * The amount of times the user have removed a note block.
+     */
     noteRemoved: number;
 
     // Int16 properties
+
+    /**
+     * The first 2 bytes are always zero. In the old NBS format, this used to be
+     * song length, which can never be zero.
+     * 
+     * This is how you can check whether a .nbs file is using the new format.
+     */
     songLengthOld: number;
+    /**
+     * The length of the song, measured in ticks. Divide this by the tempo to get
+     * the length of the song in seconds. Note Block Studio doesn't really care
+     * about this value, the song size is calculated in the second part.
+     * 
+     * (Note: this was re-added in NBS version 3)
+     */
     songLength: number;
+    /**
+     * The last layer with at least one note block in it, or the last layer that
+     * has had its name, volume or stereo changed.
+     */
     layerCtr: number;
+    /**
+     * The tempo of the song multiplied by 100 (for example, 1225 instead of 12.25).
+     * Measured in ticks per second.
+     */
     tempo: number;
+    /**
+     * Determines which part of the song (in ticks) it loops back to.
+     */
     loopStartTick: number;
 
     // Int8 properties
+
+    /**
+     * The version of the new NBS format.
+     */
     version: number;
+    /**
+     * Amount of default instruments when the song was saved. This is needed to
+     * determine at what index custom instruments start.
+     */
     instumentCtr: number;
+    /**
+     * Whether auto-saving has been enabled (0 or 1). As of NBS version 4 this
+     * value is still saved to the file, but no longer used in the program.
+     */
     autoSave: number;
+    /**
+     * The amount of minutes between each auto-save (if it has been enabled) (1-60).
+     * As of NBS version 4 this value is still saved to the file, but no longer used
+     * in the program.
+     */
     autoSaveDuration: number;
+    /**
+     * The time signature of the song. If this is 3, then the signature is 3/4.
+     * 
+     * Default is 4. This value ranges from 2-8.
+     */
     timeSign: number;
+    /**
+     * Whether looping is on or off. (0 = off, 1 = on)
+     */
     loop: number;
+    /**
+     * 0 = infinite. Other values mean the amount of times the song loops.
+     */
     maxLoop: number;
 
     constructor();
@@ -126,6 +212,7 @@ declare namespace NBSRW {
       value: NBSCustomInstrument,
       length: number
     };
+
     /**
      * The name of the instrument.
      */
@@ -141,11 +228,11 @@ declare namespace NBSRW {
      */
     key: number;
     /**
-     * Whether the piano should automatically press keys with this instrument when the marker passes them (0 or 1).
+     * Whether the piano should automatically press keys with this instrument when
+     * the marker passes them (0 or 1).
      */
     pressPianoKey: number;
   }
-
 
   export class NBSPlayerIterator {
     readonly nbs: NBS;
@@ -181,8 +268,25 @@ declare namespace NBSRW {
     customInstuments: NBSCustomInstrument[];
 
     constructor();
+
+    /**
+     * Calculate the time to the beginning of the song in seconds.
+     * @param {number} tick - The number of NBS ticks from the beginning of the song.
+     * @returns {number}
+     */
+    getTimeSecFor(tick: number): number;
+
+    /**
+     * Calculate the time to the beginning of the song in gameticks.
+     * @param {number} tick - The number of NBS ticks from the beginning of the song.
+     * @returns {number}
+     */
+    getTimeGtFor(tick: number): number;
   }
 
+  /**
+   * Vanilla instrument sound events of Minecraft Java.
+   */
   const INSTJE: {
     0: "block.note_block.harp",
     1: "block.note_block.bass",
@@ -200,7 +304,12 @@ declare namespace NBSRW {
     13: "block.note_block.bit",
     14: "block.note_block.banjo",
     15: "block.note_block.pling"
-  }, INSTBE: {
+  };
+
+  /**
+   * Vanilla instrument sound events of Minecraft Bedrock.
+   */
+  const INSTBE: {
     0: "note.harp",
     1: "note.bass",
     2: "note.bd",

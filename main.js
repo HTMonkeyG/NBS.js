@@ -179,11 +179,6 @@ class NBS {
     this.customInstuments = [];
   }
 
-  /**
-   * Calculate the time to the beginning of the song in seconds.
-   * @param {Number} tick 
-   * @returns {Number}
-   */
   getTimeSecFor(tick) {
     return tick / this.header.tempo * 100
   }
