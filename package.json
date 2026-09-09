@@ -1,11 +1,15 @@
 {
   "name": "nbs-note.js",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "Read and write Minecraft Note Block Studio .nbs files with JS.",
   "main": "main.js",
   "directories": {
     "test": "test"
   },
+  "files": [
+    "main.js",
+    "main.d.ts"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
