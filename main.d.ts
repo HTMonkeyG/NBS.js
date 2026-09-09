@@ -122,6 +122,12 @@ declare namespace NBSRW {
     maxLoop: number;
 
     constructor();
+
+    /**
+     * Write the header into the buffer at the given cursor.
+     * @returns The cursor position after writing.
+     */
+    serialize(buffer: DataView, cursor: number): number;
   }
 
   export class NBSNote {
@@ -158,6 +164,12 @@ declare namespace NBSRW {
     layer: number;
 
     constructor();
+
+    /**
+     * Write the note into the buffer at the given cursor.
+     * @returns The cursor position after writing.
+     */
+    serialize(buffer: DataView, cursor: number): number;
   }
 
   export class NBSEffectiveTick {
@@ -176,6 +188,12 @@ declare namespace NBSRW {
     notes: NBSNote[];
 
     constructor();
+
+    /**
+     * Write the tick into the buffer at the given cursor.
+     * @returns The cursor position after writing.
+     */
+    serialize(buffer: DataView, cursor: number): number;
   }
 
   export class NBSLayer {
@@ -205,6 +223,12 @@ declare namespace NBSRW {
     stereo: number;
 
     constructor();
+
+    /**
+     * Write the layer into the buffer at the given cursor.
+     * @returns The cursor position after writing.
+     */
+    serialize(buffer: DataView, cursor: number): number;
   }
 
   export class NBSCustomInstrument {
@@ -232,6 +256,14 @@ declare namespace NBSRW {
      * the marker passes them (0 or 1).
      */
     pressPianoKey: number;
+
+    constructor();
+
+    /**
+     * Write the custom instrument into the buffer at the given cursor.
+     * @returns The cursor position after writing.
+     */
+    serialize(buffer: DataView, cursor: number): number;
   }
 
   export class NBSPlayerIterator {
@@ -282,6 +314,12 @@ declare namespace NBSRW {
      * @returns {number}
      */
     getTimeGtFor(tick: number): number;
+
+    /**
+     * Serialize to an NBS file buffer.
+     * @returns The serialized .nbs data.
+     */
+    serialize(): ArrayBuffer;
   }
 
   /**
